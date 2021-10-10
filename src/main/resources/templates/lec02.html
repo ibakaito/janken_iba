@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<body>
+  <h1>Lec02 Get!</h1>
+  <div>[[${n}]]</div>
+  <p>
+
+    <a href="gu">ぐー</a>
+    <a href="ch">ちょき</a>
+    <a href="pa">ぱー</a>
+  </p>
+  <div th:if="${JResult}">
+    <a>あなたの手 [[${player}]]</a><br>
+    <a>相手の手 [[${cpu}]]</a><br>
+    <a>結果 [[${JResult}]]</a><br>
+  </div>
+</body>
+
+</html>
