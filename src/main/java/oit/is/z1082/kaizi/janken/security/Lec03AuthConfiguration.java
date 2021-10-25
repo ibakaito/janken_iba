@@ -19,6 +19,8 @@ public class Lec03AuthConfiguration extends WebSecurityConfigurerAdapter {
     auth.inMemoryAuthentication().withUser("user1").password(passwordEncoder().encode("p@ss")).roles("USER");
 
     auth.inMemoryAuthentication().withUser("user2").password(passwordEncoder().encode("pass")).roles("USER");
+
+    auth.inMemoryAuthentication().withUser("ほんだ").password(passwordEncoder().encode("honda")).roles("USER");
   }
 
   @Bean
@@ -32,8 +34,8 @@ public class Lec03AuthConfiguration extends WebSecurityConfigurerAdapter {
     http.formLogin();
     http.authorizeRequests().antMatchers("/lec02/**").authenticated();
     http.logout().logoutSuccessUrl("/");
-    // http.csrf().disable();
-    // http.headers().frameOptions().disable();
+    http.csrf().disable();
+    http.headers().frameOptions().disable();
   }
 
 }

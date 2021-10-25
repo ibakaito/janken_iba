@@ -3,28 +3,28 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Janken</title>
 </head>
 
 <body>
   <div><a href="/logout">ログアウト</a></div>
 
   <h1>Lec02 Get!</h1>
-  <a>エントリー</a>
 
-
-  <div th:if="${entry}">
-    <ul>
-      <li th:each="user : ${entry.users}">[[${user}]]</li>
-    </ul>
-  </div>
+  <p th:if="${userinfo}">
+    <a>エントリー</a>
+  <ul>
+    <div th:each="user : ${userinfo}">
+      <li><a th:href="@{/lec02/match(id=${user.id})}">[[${user.name}]]</a></li>
+    </div>
+  </ul>
+  </p>
 
   <div>
     [[${login_user}]]
   </div>
 
   <p>
-
     <a href="gu">ぐー</a>
     <a href="ch">ちょき</a>
     <a href="pa">ぱー</a>
@@ -34,6 +34,14 @@
     <a>相手の手 [[${cpu}]]</a><br>
     <a>結果 [[${JResult}]]</a><br>
   </div>
+
+  <p th:if="${match}">
+    <a>試合状況</a>
+  <div th:each="m : ${match}">
+    id=[[${m.id}]] user1=[[${m.user1}]] user2=[[${m.user2}]] user1Hand=[[${m.user1Hand}]] user2Hand=[[${m.user2Hand}]]
+  </div>
+  </p>
+
 </body>
 
 </html>
