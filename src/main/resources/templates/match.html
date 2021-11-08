@@ -7,23 +7,22 @@
 </head>
 
 <body>
-  <h1>ユーザー情報</h1>
+  <h1>Match</h1>
 
-  <p th:if="${un}">
-    自身のユーザー名
-  <div>[[${un.name}]]</div>
-  </p>
-
-  <p th:if="${unyn}">
-    相手のユーザー名
-  <div>[[${unyn.name}]]</div>
+  <p th:if="${un1}">
+  <div th:if="${login_user}">
+    <h2>[[${un1.name}]] VS [[${login_user}]]</h2>
+  </div>
   </p>
 
   <p>
-    <a th:href="@{/lec02/match1(te=${'Gu'})}">ぐー</a>
-    <a th:href="@{/lec02/match1(te=${'Choki'})}">ちょき</a>
-    <a th:href="@{/lec02/match1(te=${'Pa'})}">ぱー</a>
+  <div>
+    <a th:href="@{/lec02/match2(id1=${un1.id},id2=${un2.id},te=Gu)}">ぐー</a>
+    <a th:href="@{/lec02/match2(id1=${un1.id},id2=${un2.id},te=Choki)}">ちょき</a>
+    <a th:href="@{/lec02/match2(id1=${un1.id},id2=${un2.id},te=Pa)}">ぱー</a>
+  </div>
   </p>
+
   <div th:if="${result}">
     <a>あなたの手 [[${te}]]</a><br>
     <a>相手の手 [[${cpu}]]</a><br>
