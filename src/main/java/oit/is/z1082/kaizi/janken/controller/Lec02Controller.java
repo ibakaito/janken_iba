@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.z1082.kaizi.janken.model.Janken;
 import oit.is.z1082.kaizi.janken.model.Entry;
@@ -19,6 +20,9 @@ import oit.is.z1082.kaizi.janken.model.User;
 import oit.is.z1082.kaizi.janken.model.UserMapper;
 import oit.is.z1082.kaizi.janken.model.MatchMapper;
 import oit.is.z1082.kaizi.janken.model.Match;
+import oit.is.z1082.kaizi.janken.model.MatchInfo;
+import oit.is.z1082.kaizi.janken.model.MatchInfoMapper;
+import oit.is.z1082.kaizi.janken.service.AsyncKekka;
 
 @Controller
 @RequestMapping("/lec02")
@@ -29,52 +33,94 @@ public class Lec02Controller {
   @Autowired
   UserMapper userMapper;
   @Autowired
-  private Entry entry;
+  MatchInfoMapper matchinfoMapper;
+  @Autowired
+  AsyncKekka asynckekka;
 
   @GetMapping("step2")
-  public String sample38(Principal prin, ModelMap model) {
-    String loginUser = prin.getName();
-    this.entry.addUser(loginUser);
-    String lgu = "Hi " + loginUser;
-    model.addAttribute("login_user", lgu);
-    model.addAttribute("entry", this.entry);
-    return "lec02.html";
+  public SseEmitter pushMatch() {
+    final SseEmitter sseEmitter = new SseEmitter();
+    this.asynckekka.asyncShowMatchList(sseEmitter);
+    return sseEmitter;
   }
 
   @GetMapping("step3")
+  @Transactional
   public String sample4(Principal prin, ModelMap model) {
     String loginUser = prin.getName();
     String lgu = "Hi " + loginUser;
+    User un1 = userMapper.selectByName(loginUser);
     ArrayList<User> user3 = userMapper.selectAllUser();
     ArrayList<Match> match1 = matchMapper.selectAllMatch();
+    ArrayList<MatchInfo> match3 = matchinfoMapper.selectTrueMatchInfo();
+    model.addAttribute("player", un1);
     model.addAttribute("login_user", lgu);
     model.addAttribute("userinfo", user3);
-    model.addAttribute("match", match1);
+    model.addAttribute("match1", match1);
+    model.addAttribute("match3", match3);
     return "lec02.html";
   }
 
   @GetMapping("step1")
-  public String lec02() {
+  public String back() {
     return "lec02.html";
   }
 
   @GetMapping("match")
-  public String lec002(@RequestParam Integer id, ModelMap model) {
-    User un = userMapper.selectById(id);
-    model.addAttribute("un", un);
-    User unyn = userMapper.selectByNotId(id);
-    model.addAttribute("unyn", unyn);
+  public String match1(@RequestParam Integer id, @RequestParam Integer id2, Principal prin, ModelMap model) {
+    String loginUser = prin.getName();
+    model.addAttribute("login_user", loginUser);
+    User un1 = userMapper.selectById(id);
+    User un2 = userMapper.selectById(id2);
+    model.addAttribute("un1", un1);
+    model.addAttribute("un2", un2);
     return "match.html";
   }
 
+  @GetMapping("match2")
+  @Transactional
+  public String match2(@RequestParam Integer id1, @RequestParam Integer id2, String te, Principal prin,
+      ModelMap model) {
+    String loginUser = prin.getName();
+    String logu = "Hi " + loginUser;
+    model.addAttribute("logu", logu);
+    int sep = 0;
+    for (MatchInfo m : matchinfoMapper.selectTrueMatchInfo()) {
+      if (m.getUser2() == id2) {
+        sep++;
+      }
+    }
+
+    boolean a = true;
+    MatchInfo m = new MatchInfo();
+    m.setUser1(id2);
+    m.setUser2(id1);
+    m.setUser1Hand(te);
+    m.setIsActive(a);
+    model.addAttribute("m", m);
+
+    if (sep != 0) {
+      MatchInfo mi = matchinfoMapper.selectByUser2(id1);
+      Match m4 = new Match();
+      m4.setUser1(mi.getUser1());
+      m4.setUser2(mi.getUser2());
+      m4.setUser1Hand(mi.getUser1Hand());
+      m4.setUser2Hand(te);
+      m4.setIsActive(true);
+      model.addAttribute("match001", m4);
+      matchMapper.insertMatch(m4);
+    } else {
+      matchinfoMapper.insertMatchInfo(m);
+    }
+    return "wait.html";
+  }
+
   @GetMapping("match1")
-  public String janken(@RequestParam String te, ModelMap model) {
+  public String janken(@RequestParam Integer id, @RequestParam Integer id2, @RequestParam String te, ModelMap model) {
     String cpu = "Gu";
-    int id = 2;
-    String name = "ほんだ";
     User un = userMapper.selectById(id);
     model.addAttribute("un", un);
-    User unyn = userMapper.selectByNotId(id);
+    User unyn = userMapper.selectByNotId(id2);
     model.addAttribute("unyn", unyn);
     String Win = "You Win!";
     String Lose = "You Lose";
@@ -95,7 +141,7 @@ public class Lec02Controller {
     match.setUser1Hand(te);
     match.setUser2Hand(cpu);
     matchMapper.insertMatch(match);
-    return "match.html";
+    return "wait.html";
   }
 
   @GetMapping("ch")

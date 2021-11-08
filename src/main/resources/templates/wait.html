@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
+
+<head>
+  <meta charset="utf-8">
+  <title>wait</title>
+
+  <script>
+    window.onload = function () {
+      var sse = new EventSource('/lec02/step2');
+      sse.onmessage = function (event) {
+        console.log(event.data);
+        //var match_list = JSON.parse(event.data);
+        var matchNum = match_list.length;
+        document.getElementById("match_list").textContent = event.data;
+        /*var match_table = "";
+        for (var i = 0; i < matchNum; i++) {
+          var bgn_tr = "<tr>";
+          var end_tr = "</tr>";
+          var idx = "<td>" + match_list[i].id + "</td>";
+          var m_user1 = "<td>" + match_list[i].user1 + "</td>";
+          var m_user2 = "<td>" + match_list[i].user2 + "</td>";
+          var m_user1Hand = "<td>" + match_list[i].user1Hand + "</td>"
+          var m_user2Hand = "<td>" + match_list[i].user2Hand + "</td>"
+          match_table = match_table + bgn_tr + idx + m_user1 + m_user2 + m_user1Hand + m_user2Hand + end_tr;
+        }
+        console.log(match_table);
+        var p = document.getElementById("match_list");
+        p.innerHTML = match_table;*/
+      }
+    }
+  </script>
+
+</head>
+
+<body>
+  <h1>相手の手を待ってます.</h1>
+
+  <div th:if="${logu}">
+    [[${logu}]]
+  </div>
+
+  <p id="match_list">
+  <h3>結果</h3>
+  </p>
+
+  <p>
+    <a th:href="@{/lec02/match(id=${m.user2},id2=${m.user1})}">もどる</a>
+  </p>
+</body>

@@ -11,33 +11,34 @@
 
   <h1>Lec02 Get!</h1>
 
+  <div th:if="${login_user}">
+    [[${login_user}]]
+  </div>
+
+  <h2>エントリー</h2>
   <p th:if="${userinfo}">
-    <a>エントリー</a>
   <ul>
     <div th:each="user : ${userinfo}">
-      <li><a th:href="@{/lec02/match(id=${user.id})}">[[${user.name}]]</a></li>
+      <li><a th:href="@{/lec02/match(id=${user.id},id2=${player.id})}">[[${user.name}]]</a></li>
     </div>
   </ul>
   </p>
 
-  <div>
-    [[${login_user}]]
+  <h2>アクティブな試合</h2>
+  <p th:if="${match3}">
+  <div th:each="m: ${match3}">
+    <tr>
+      <td>id:[[${m.id}]]</td>
+      <td>user1:[[${m.user1}]]</td>
+      <td>user2:[[${m.user2}]]</td>
+      <td>isActive:[[${m.isActive}]]</td>
+    </tr>
   </div>
-
-  <p>
-    <a href="gu">ぐー</a>
-    <a href="ch">ちょき</a>
-    <a href="pa">ぱー</a>
   </p>
-  <div th:if="${JResult}">
-    <a>あなたの手 [[${player}]]</a><br>
-    <a>相手の手 [[${cpu}]]</a><br>
-    <a>結果 [[${JResult}]]</a><br>
-  </div>
 
-  <p th:if="${match}">
-    <a>試合状況</a>
-  <div th:each="m : ${match}">
+  <p th:if="${match1}">
+  <h2>試合状況</h2>
+  <div th:each="m : ${match1}">
     id=[[${m.id}]] user1=[[${m.user1}]] user2=[[${m.user2}]] user1Hand=[[${m.user1Hand}]] user2Hand=[[${m.user2Hand}]]
   </div>
   </p>
