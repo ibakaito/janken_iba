@@ -46,8 +46,8 @@ public class AsyncKekka {
           continue;
         }
         Match result = mMapper.selectByAllTrue();
-        //mMapper.updateById(mMapper.selectId());
-        //miMapper.updateById(miMapper.selectId());
+        // mMapper.updateById(mMapper.selectId());
+        // miMapper.updateById(miMapper.selectId());
         emitter.send(result);
         TimeUnit.MILLISECONDS.sleep(1000);
         dbUpdated = false;

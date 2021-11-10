@@ -30,8 +30,8 @@ public interface MatchInfoMapper {
   void insertMatchInfo(MatchInfo matchinfo);
 
   @Update("UPDATE MATCHINFO SET isActive=#{isActive} WHERE id = #{id}")
-  void updateById(MatchInfo matchInfo);
+  void updateByInfo(MatchInfo matchInfo);
 
-  @Update("UPDATE MATCHEINFO SET isActive=false WHERE id = #{id}")
+  @Update("UPDATE MATCHINFO SET isActive=false WHERE id = #{id}")
   void updateById(int id);
 }

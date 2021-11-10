@@ -85,18 +85,17 @@ public class Lec02Controller {
     String logu = "Hi " + loginUser;
     model.addAttribute("logu", logu);
     int sep = 0;
-    for (MatchInfo m : matchinfoMapper.selectTrueMatchInfo()) {
-      if (m.getUser2() == id2) {
+    for (MatchInfo mk : matchinfoMapper.selectTrueMatchInfo()) {
+      if (mk.getUser2() == id2) {
         sep++;
       }
     }
 
-    boolean a = true;
     MatchInfo m = new MatchInfo();
     m.setUser1(id2);
     m.setUser2(id1);
     m.setUser1Hand(te);
-    m.setIsActive(a);
+    m.setIsActive(true);
     model.addAttribute("m", m);
 
     if (sep != 0) {
@@ -112,35 +111,6 @@ public class Lec02Controller {
     } else {
       matchinfoMapper.insertMatchInfo(m);
     }
-    return "wait.html";
-  }
-
-  @GetMapping("match1")
-  public String janken(@RequestParam Integer id, @RequestParam Integer id2, @RequestParam String te, ModelMap model) {
-    String cpu = "Gu";
-    User un = userMapper.selectById(id);
-    model.addAttribute("un", un);
-    User unyn = userMapper.selectByNotId(id2);
-    model.addAttribute("unyn", unyn);
-    String Win = "You Win!";
-    String Lose = "You Lose";
-    String Draw = "Draw";
-    model.addAttribute("te", te);
-    model.addAttribute("cpu", cpu);
-    if (te.equals("Pa")) {
-      model.addAttribute("result", Win);
-    } else if (te.equals("Choki")) {
-      model.addAttribute("result", Lose);
-    } else {
-      model.addAttribute("result", Draw);
-    }
-
-    Match match = new Match(); // int id = match.getId1(); // match.setId(id);
-    match.setUser1(un.getId());
-    match.setUser2(unyn.getId());
-    match.setUser1Hand(te);
-    match.setUser2Hand(cpu);
-    matchMapper.insertMatch(match);
     return "wait.html";
   }
 
