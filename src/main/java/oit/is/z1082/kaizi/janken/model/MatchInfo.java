@@ -47,7 +47,7 @@ public class MatchInfo {
     return this.isActive;
   }
 
-  public void setIsActive(boolean isActive2) {
-    this.isActive = isActive2;
+  public void setIsActive(boolean isActive) {
+    this.isActive = isActive;
   }
 }
